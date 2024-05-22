@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     Animator animator;
 
     bool onGround;
+    bool isJumping;
 
     private void Start()
     {
@@ -31,6 +32,25 @@ public class PlayerController : MonoBehaviour
         {
             animator.SetBool("isWalking", false);
         }
+
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            speed *= 2;
+            animator.SetBool("isRunning", true);
+        }
+
+        if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            speed /= 2;
+            animator.SetBool("isRunning", false);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            onGround = false;
+            isJumping = true;
+            animator.SetTrigger("jumped");
+        }
     }
 
     private void FixedUpdate()
@@ -47,6 +67,11 @@ public class PlayerController : MonoBehaviour
 
         rigidbody.MoveRotation(rigidbody.rotation
             * Quaternion.Euler(0f, angleSpeed * moveX, 0f));
+
+        if (isJumping)
+        {
+            rigidbody.AddForce(Vector3.up * speed);
+        }
     }
 
     void DetectGround()
@@ -66,5 +91,22 @@ public class PlayerController : MonoBehaviour
     {
         Gizmos.color = Color.red;
         Gizmos.DrawLine(transform.position, transform.position + Vector3.down * 1.3f);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            onGround = true;
+        }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            onGround = false;
+            isJumping = false;
+        }
     }
 }
