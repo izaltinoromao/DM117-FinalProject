@@ -23,7 +23,7 @@ public class EnemyController : MonoBehaviour
             if (count == 3)
             {
                 animator.SetBool("isDead", true);
-                Destroy(this.gameObject, 7f);
+                Destroy(this.gameObject, 2f);
                 LevelUiController.Instance.DeathCount++;
             }
         }

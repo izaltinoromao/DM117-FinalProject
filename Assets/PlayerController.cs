@@ -18,11 +18,13 @@ public class PlayerController : MonoBehaviour
     public GameObject aimCamera;
     public GameObject gunPoint;
     public GameObject bullet;
+    public AudioSource shootAudio;
 
     private void Start()
     {
         rigidbody = GetComponentInChildren<Rigidbody>();
         animator = GetComponentInChildren<Animator>();
+        shootAudio = GetComponentInChildren<AudioSource>();
     }
 
     private void Update()
@@ -67,6 +69,7 @@ public class PlayerController : MonoBehaviour
             if (Input.GetMouseButtonUp(0))
             {
                 GameObject bulletTemp = Instantiate(bullet, gunPoint.transform.position, gunPoint.transform.rotation);
+                shootAudio.Play();
                 Destroy(bulletTemp, 3f);
             }
         }

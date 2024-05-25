@@ -5,14 +5,8 @@ using UnityEngine;
 
 public class BulletController : MonoBehaviour
 {
-    float speed = 0.1f;
+    float speed = 0.5f;
 
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
     void Update()
     {
         transform.position += transform.forward * speed;

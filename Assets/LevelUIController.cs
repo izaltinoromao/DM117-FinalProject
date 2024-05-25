@@ -1,7 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 public class LevelUiController : MonoBehaviour
@@ -9,6 +8,8 @@ public class LevelUiController : MonoBehaviour
 
     [SerializeField] TMP_Text enemyCount;
     [SerializeField] int startingEnemies;
+    [SerializeField] GameObject successGamePanel;
+    [SerializeField] Button restartButton;
 
     public static LevelUiController Instance;
 
@@ -22,6 +23,11 @@ public class LevelUiController : MonoBehaviour
             deathCount = value;
             int alive = startingEnemies - deathCount;
             enemyCount.text = $"Enemies Alive: {alive}";
+
+            if (alive <= 0)
+            {
+                LevelUiController.Instance.ShowSuccessGamePanel();
+            }
         }
     }
 
@@ -35,8 +41,21 @@ public class LevelUiController : MonoBehaviour
         enemyCount.text = $"Enemies Alive: {startingEnemies}";
     }
 
-    void Update()
+    public void ShowSuccessGamePanel()
     {
-        
+        Time.timeScale = 0;
+        successGamePanel.SetActive(true);
+    }
+
+    public void OnClickButtonRestart()
+    {
+        Time.timeScale = 1;
+        SceneManager.LoadScene("Map_v1");
+    }
+
+    public void OnClickButtonMenu()
+    {
+        Time.timeScale = 1;
+        SceneManager.LoadScene("MenuScene");
     }
 }
