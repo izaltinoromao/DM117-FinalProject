@@ -101,7 +101,7 @@ public class PlayerController : MonoBehaviour
     void DetectGround()
     {
         RaycastHit hit;
-        if(Physics.Raycast(this.transform.position, Vector3.down, out hit, 1.3f))
+        if(Physics.Raycast(this.transform.position, Vector3.down, out hit, 0.3f))
         {
             onGround = true;
         }
@@ -109,12 +109,6 @@ public class PlayerController : MonoBehaviour
         {
             onGround = false;
         }
-    }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawLine(transform.position, transform.position + Vector3.down * 1.3f);
     }
 
     private void OnCollisionEnter(Collision collision)

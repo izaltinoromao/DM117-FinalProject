@@ -19,12 +19,13 @@ public class EnemyController : MonoBehaviour
         {
             count++;
             Destroy(other.gameObject);
-        }
 
-        if (count >= 3)
-        {
-            animator.SetBool("isDead", true);
-            Destroy(this.gameObject, 7f);
+            if (count == 3)
+            {
+                animator.SetBool("isDead", true);
+                Destroy(this.gameObject, 7f);
+                LevelUiController.Instance.DeathCount++;
+            }
         }
     }
 }
