@@ -14,6 +14,10 @@ public class PlayerController : MonoBehaviour
     bool onGround;
     bool isJumping;
 
+    public GameObject aimCamera;
+    public GameObject gunPoint;
+    public GameObject bullet;
+
     private void Start()
     {
         rigidbody = GetComponentInChildren<Rigidbody>();
@@ -50,6 +54,23 @@ public class PlayerController : MonoBehaviour
             onGround = false;
             isJumping = true;
             animator.SetTrigger("jumped");
+        }
+
+        if (Input.GetMouseButton(1))
+        {
+            aimCamera.SetActive(true);
+            animator.SetBool("isAiming", true);
+
+            if (Input.GetMouseButtonUp(0))
+            {
+                GameObject bulletTemp = Instantiate(bullet, gunPoint.transform.position, gunPoint.transform.rotation);
+                Destroy(bulletTemp, 3f);
+            }
+        }
+        else
+        {
+            aimCamera.SetActive(false);
+            animator.SetBool("isAiming", false);
         }
     }
 
