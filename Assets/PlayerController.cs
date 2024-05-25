@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
 
     bool onGround;
     bool isJumping;
+    bool isRunning;
 
     public GameObject aimCamera;
     public GameObject gunPoint;
@@ -40,12 +41,14 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             speed *= 2;
+            isRunning = true;
             animator.SetBool("isRunning", true);
         }
 
         if (Input.GetKeyUp(KeyCode.LeftShift))
         {
             speed /= 2;
+            isRunning = false;
             animator.SetBool("isRunning", false);
         }
 
@@ -56,7 +59,7 @@ public class PlayerController : MonoBehaviour
             animator.SetTrigger("jumped");
         }
 
-        if (Input.GetMouseButton(1))
+        if (Input.GetMouseButton(1) && !isRunning)
         {
             aimCamera.SetActive(true);
             animator.SetBool("isAiming", true);

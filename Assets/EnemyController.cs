@@ -4,19 +4,27 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
+    Animator animator;
+
     private int count = 0;
+
+    private void Start()
+    {
+        animator = GetComponentInChildren<Animator>();
+    }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Bullet"))
         {
             count++;
+            Destroy(other.gameObject);
         }
 
         if (count >= 3)
         {
-            Destroy(other.gameObject);
-            Destroy(this.gameObject);
+            animator.SetBool("isDead", true);
+            Destroy(this.gameObject, 7f);
         }
     }
 }
