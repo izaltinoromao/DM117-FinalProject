@@ -13,11 +13,18 @@ public class PlayerController : MonoBehaviour
 
     bool onGround;
     bool isJumping;
+    bool isRunning;
+
+    public GameObject aimCamera;
+    public GameObject gunPoint;
+    public GameObject bullet;
+    public AudioSource shootAudio;
 
     private void Start()
     {
         rigidbody = GetComponentInChildren<Rigidbody>();
         animator = GetComponentInChildren<Animator>();
+        shootAudio = GetComponentInChildren<AudioSource>();
     }
 
     private void Update()
@@ -36,12 +43,14 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             speed *= 2;
+            isRunning = true;
             animator.SetBool("isRunning", true);
         }
 
         if (Input.GetKeyUp(KeyCode.LeftShift))
         {
             speed /= 2;
+            isRunning = false;
             animator.SetBool("isRunning", false);
         }
 
@@ -50,6 +59,24 @@ public class PlayerController : MonoBehaviour
             onGround = false;
             isJumping = true;
             animator.SetTrigger("jumped");
+        }
+
+        if (Input.GetMouseButton(1) && !isRunning)
+        {
+            aimCamera.SetActive(true);
+            animator.SetBool("isAiming", true);
+
+            if (Input.GetMouseButtonUp(0))
+            {
+                GameObject bulletTemp = Instantiate(bullet, gunPoint.transform.position, gunPoint.transform.rotation);
+                shootAudio.Play();
+                Destroy(bulletTemp, 3f);
+            }
+        }
+        else
+        {
+            aimCamera.SetActive(false);
+            animator.SetBool("isAiming", false);
         }
     }
 
@@ -77,7 +104,7 @@ public class PlayerController : MonoBehaviour
     void DetectGround()
     {
         RaycastHit hit;
-        if(Physics.Raycast(this.transform.position, Vector3.down, out hit, 1.3f))
+        if(Physics.Raycast(this.transform.position, Vector3.down, out hit, 0.3f))
         {
             onGround = true;
         }
@@ -85,12 +112,6 @@ public class PlayerController : MonoBehaviour
         {
             onGround = false;
         }
-    }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawLine(transform.position, transform.position + Vector3.down * 1.3f);
     }
 
     private void OnCollisionEnter(Collision collision)
